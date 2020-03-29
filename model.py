@@ -29,7 +29,7 @@ def fcn(backbone_name='vgg16', input_shape=(224,224,3), num_classes=1000, skip=T
         pool3 = Conv2D(num_classes, 1)(pool3)
         x = add([x, pool3])
 
-        x = Conv2DTranspose(num_classes, 4, strides=8, padding='same', activation='softmax')(x)
+        x = Conv2DTranspose(num_classes, 16, strides=8, padding='same', activation='softmax')(x)
 
     model = Model(backbone.input, x)
 
