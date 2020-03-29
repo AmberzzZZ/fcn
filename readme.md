@@ -3,6 +3,4 @@
 
 
 2. element-wise add
-    2.1 1\*1 conv on pool3 & pool4
-    2.2 padding on pool3 & pool4
-    2.3 QUESTION: what's the difference
+    RUN 1\*1 conv on pool3 & pool4 to obtain feature maps with [num_classes] channels
