@@ -1,8 +1,9 @@
 from keras.models import Model
-from keras.layers import Conv2D, Dropout, Conv2DTranspose, add, UpSampling2D
+from keras.layers import Conv2D, Dropout, Conv2DTranspose, add
 from backbones import get_backbone
 from keras.optimizers import Adam
 import numpy as np
+
 
 def fcn(backbone_name='vgg16', input_shape=(224,224,3), num_classes=1000, skip=True, fixed=True):
     # backbone
@@ -21,7 +22,7 @@ def fcn(backbone_name='vgg16', input_shape=(224,224,3), num_classes=1000, skip=T
     # upsampling
     if not skip:
         x = Conv2DTranspose(num_classes, 64, strides=32, padding='same', activation='softmax',
-                            kernel_initializer='bilinear')(x)
+                            kernel_initializer='bilinear', name='final_deconv')(x)
     else:
         x = Conv2DTranspose(num_classes, 4, strides=2, padding='same', kernel_initializer=bilinear)(x)
         pool4 = Conv2D(num_classes, 1, kernel_initializer='zero')(pool4)
@@ -35,8 +36,7 @@ def fcn(backbone_name='vgg16', input_shape=(224,224,3), num_classes=1000, skip=T
                             activation='softmax', name='final_deconv')(x)
 
     model = Model(backbone.input, x)
-    if skip and fixed:
-        model.get_layer('final_deconv').trainable = False
+    model.get_layer('final_deconv').trainable = False
 
     adam = Adam(lr=3e-4, decay=5e-3)
     model.compile(adam, loss='categorical_crossentropy', metrics=['acc'])
